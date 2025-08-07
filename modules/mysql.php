@@ -17,11 +17,11 @@
 				$mysql_db_name = constant("MYSQL_DEFAULT_DB_NAME") ?? null;
 			}
 			
-			if(!$mysql_password){
-				$mysql_password = constant("MYSQL_DEFAULT_DB_PASSWORD") ?? null;
-			}
+			// if(!$mysql_password){
+			// 	$mysql_password = constant("MYSQL_DEFAULT_DB_PASSWORD") ?? null;
+			// }
 			
-			if(!$mysql_servername || !$mysql_username || !$mysql_db_name || !$mysql_password){
+			if(!$mysql_servername || !$mysql_username || !$mysql_db_name ){
 				error_log(date("Y-m-d H:i:s")."It seems that MYSQL server details, user, password is not set");
 				return false;
 			}
