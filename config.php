@@ -81,8 +81,10 @@
 	include_all_modules();	
 	include_all_plugins();
 	
+	/* Commenting out call to non-existent function
 	if(function_exists("get_now")){
 		$globals["app_loaded_datetime"] = get_now();
 	}
+		*/
 	
 ?>
