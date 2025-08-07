@@ -1,0 +1,10 @@
+[07-Aug-2025 21:55:12 Asia/Jerusalem] 2025-08-07 21:55:12It seems that MYSQL server details, user, password is not set
+[07-Aug-2025 21:55:12 Asia/Jerusalem] [INCLUDE FAILED] [3876239876478392764328765832546] Message: mysqli_query(): Argument #1 ($mysql) must be of type mysqli, bool given | File: C:\Users\agent\Documents\John Bryce\Exams\Job assessment tests\AssafMedia\home-test\modules\mysql.php | Line: 208 | Module: mysql | Trace: #0 C:\Users\agent\Documents\John Bryce\Exams\Job assessment tests\AssafMedia\home-test\modules\mysql.php(208): mysqli_query(false, 'SELECT NOW();')
+#1 C:\Users\agent\Documents\John Bryce\Exams\Job assessment tests\AssafMedia\home-test\modules\mysql.php(297): mysql_query('SELECT NOW();', false)
+#2 C:\Users\agent\Documents\John Bryce\Exams\Job assessment tests\AssafMedia\home-test\modules\mysql.php(374): mysql_fetch_array('SELECT NOW();')
+#3 C:\Users\agent\Documents\John Bryce\Exams\Job assessment tests\AssafMedia\home-test\app_init.php(58): require_once('C:\\Users\\agent\\...')
+#4 C:\Users\agent\Documents\John Bryce\Exams\Job assessment tests\AssafMedia\home-test\app_init.php(133): include_module('mysql')
+#5 C:\Users\agent\Documents\John Bryce\Exams\Job assessment tests\AssafMedia\home-test\config.php(81): include_all_modules()
+#6 C:\Users\agent\Documents\John Bryce\Exams\Job assessment tests\AssafMedia\home-test\api.php(6): require_once('C:\\Users\\agent\\...')
+#7 {main}
+[07-Aug-2025 21:55:12 Asia/Jerusalem] ERROR 1049785978436553489267542384627363444
