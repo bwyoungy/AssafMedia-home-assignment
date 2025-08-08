@@ -638,3 +638,17 @@ video{
 	height: 100% !important;
 	width: unset !important;
 }
+
+.message-revoked {
+    font-style: italic;
+    color: gray;
+}
+
+.delete-msg-btn {
+    background: transparent;
+    border: none;
+    color: red;
+    cursor: pointer;
+    margin-left: 8px;
+    font-size: 1em;
+}

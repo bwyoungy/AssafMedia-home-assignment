@@ -216,6 +216,7 @@ var proccessMsgsArr = function(msgs){
 		var $isFromMe = $msg["is_from_me"] ?? 0;
 		var $msgType = $msg["msg_type"] ?? null;
 		var $isFromMeOrOtherSideCssClass;
+		var $msgRevokedClass = ""; // Every loop iteration initialise with empty string (otherwise all the messages are formatted as deleted oopsie)
 		var $msgDirection = "ltr";
 		
 		if($msgContent){
@@ -247,8 +248,10 @@ var proccessMsgsArr = function(msgs){
 			continue;
 		}		
 		
+		// Update "message content" and revoked class
 		if($msgType=="revoked"){
-			$msgContent = "הודעה זו נמחקה";
+			$msgContent = "This message was deleted";
+			$msgRevokedClass = "message-revoked";
 		}				
 		
 		if($msgType=="audio"){
@@ -267,7 +270,7 @@ var proccessMsgsArr = function(msgs){
 		
 		var $elm = "";
 	
-		$elm += '<div id="'+$msgHTMLId+'" class="message-box '+$isFromMeOrOtherSideCssClass+'">';
+		$elm += '<div id="'+$msgHTMLId+'" class="message-box '+$isFromMeOrOtherSideCssClass+' '+$msgRevokedClass+'">';
 		$elm += 	'<p class="content '+$msgDirection+'">';
 		$elm += 		$msgContent;
 		$elm += 		"<br/>";
@@ -278,6 +281,12 @@ var proccessMsgsArr = function(msgs){
 		$elm += 			$msgId;
 		$elm += 		'</span>'
 		$elm += 	'</p>';
+
+		// Add delete button for messages sent by user which haven't been deleted already
+		if($isFromMe && $msgType!="revoked"){
+			$elm += '<button class="delete-msg-btn" data-msg-id="'+$msgId+'" title="Delete message">🗑️</button>';
+		}
+
 		$elm += '</div>';
 		
 		$msgsHTML = $elm+$msgsHTML;		
@@ -865,3 +874,44 @@ $(window).on("load",function(){
 	});
 	
 });
+
+// Adding click handler for delete button
+$("body").on("click", ".delete-msg-btn", function(e){
+	e.preventDefault();
+	var $btn = $(this);
+	var msgId = $btn.attr("data-msg-id");
+	var contactId = $.globals.contactId;
+
+	if(!msgId){
+		consoleLog("No msgId found for deletion", {level: 4, type: error});
+		return;
+	}
+
+	if(confirm("Are you sure you want to delete this message for everyone?")){
+		deleteMsg(msgId);
+	}
+});
+
+var deleteMsg = async function(msgId){
+	
+	postToServer({
+		route: "delete_msg_for_both",
+		data: {
+			msg_id: msgId
+		},
+		successCallback: function(data){
+			consoleLog("Message deleted successfully", {level: 0});
+
+			var msgBox = $("#msg_id_" + msgId);
+			if (msgBox.length){
+				msgBox.find(".content").html("This message was deleted");
+				msgBox.removeClass("my-message friend-message").addClass("message-revoked");
+				msgBox.find(".delete-msg-btn").remove();
+			}
+		},
+		errorCallback: function(err){
+			consoleLog("Failed to delete message", err, {level: 5, type: "error"});
+			alert("Failed to delete message. Please try again.");
+		}
+	})
+}

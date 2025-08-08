@@ -248,7 +248,65 @@
 			echo json_encode(false);
 			
 			#endregion send_wa_txt_msg
-		break;			
+		break;
+		
+		// Adding case for deletion of message. Sets the "msg_type" column in database to "revoked"
+		case "delete_msg_for_both":
+			#region delete_msg_for_both
+
+			$msg_id = $_POST["msg_id"] ?? null;
+
+			// Check if no message id passed
+			if(!$msg_id){
+				echo json_encode(false);
+				die();
+			}
+
+			// Find the original row based on msg_id
+			$query = "SELECT * FROM messages WHERE row_id = ? LIMIT 1";
+			$rows = mysql_fetch_array($query, [$msg_id]);
+
+			if(!$rows || !isset($rows[0])){
+				echo json_encode(false);
+				die();
+			}
+
+			// Extract data into variables
+			$msg = $rows[0];
+			$msg_body = $msg['msg_body'];
+			$datetime = $msg['msg_datetime'];
+			$is_from_me = $msg['is_from_me'];
+			$contact_id = $msg['contact_id'];
+			$belongs_to_username = $msg['belongs_to_username'];
+
+			// Work out other usernmae and my id using database to mark message for deletion in their view too
+			$other_username_query = "SELECT username FROM users WHERE id = ? LIMIT 1";
+			$other_username_arr = mysql_fetch_array($other_username_query, [$contact_id]);
+			$other_username = $other_username_arr[0][0] ?? null;
+
+			$my_contact_id_query = "SELECT id FROM users WHERE username = ? LIMIT 1";
+			$my_contact_id_arr = mysql_fetch_array($my_contact_id_query, [$belongs_to_username]);
+			$my_contact_id = $my_contact_id_arr[0][0] ?? null;
+			
+
+			// Update both rows to revoked
+			$update1 = mysql_update("messages", ["msg_type" => "revoked"], ["row_id" => $msg_id]);
+
+			$update2_query = "
+				UPDATE messages 
+				SET msg_type = 'revoked'
+				WHERE msg_body = ? 
+				AND msg_datetime = ? 
+				AND belongs_to_username = ? 
+				AND contact_id = ?
+				LIMIT 1";
+			$result = mysql_prepared_execute($update2_query, [$msg_body, $datetime, $other_username, $my_contact_id]);
+
+			echo json_encode($result);
+			die();
+
+			#endregion delete_msg_for_both
+		break;
 	}
 	
 	include_all_plugins("api.php");
