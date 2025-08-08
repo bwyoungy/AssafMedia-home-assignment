@@ -267,6 +267,13 @@ var proccessMsgsArr = function(msgs){
 			$msgContent += 	'<source src="'+$msg["msg_body"]+'" type="video/mp4">';
 			$msgContent += '</video>';
 		}
+
+		// Check if message contains single emoji
+		if($msgType === "text" || !$msgType) { // Check only text messages
+			if($msgContent && isSingleEmoji($msg["msg_body"])) {
+				$msgContent = '<span class="big-emoji">' + $msgContent + '</span>';
+			}
+		}
 		
 		var $elm = "";
 	
@@ -575,6 +582,12 @@ var sendTxtMsg = async function($msg=null, $contactId=null, $username=null, $tim
 	});		
 }
 
+// Function to check if message is a single emoji
+var isSingleEmoji = function(text){
+	// Using regex check if there's only one emoji in input
+	return /^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)$/u.test(text.trim());
+}
+
 var getProfilePicByContactId = async function($contactId=null,$username=null){
 	var $contactId = $contactId ?? $.globals.contactId;
 	var $username = $username ?? $.globals.username;
@@ -867,6 +880,23 @@ $(window).on("load",function(){
 		if(!$(this).hasClass("disabled")){
 			sendTxtMsg($msg);
 		}
+	});
+
+	// Add emoji-picker to display
+	const emojiPicker = document.createElement('emoji-picker');
+	document.getElementById('emoji-picker-container').appendChild(emojiPicker);
+
+	// Show the emoji picker
+	$("#emoji-btn").on("click", function() {
+		$("#emoji-picker-container").toggle();
+	});
+
+	// Add event listener when emoji is clicked, adds it to current message
+	emojiPicker.addEventListener('emoji-click', event => {
+		const $msgInput =  $('#msg');
+		$msgInput.val($msgInput.val() + event.detail.unicode);
+		$("#emoji-picker-container").hide();
+		$msgInput.focus();
 	});
 
 	$("body").on("click", ".load_more_chats", function(){

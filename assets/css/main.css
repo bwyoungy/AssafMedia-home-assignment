@@ -661,3 +661,9 @@ video{
 .message-box:hover .delete-msg-btn {
     display: inline;
 }
+
+/* Format for big emoji (when sent by itself) */
+.big-emoji {
+    font-size: 3rem;
+    line-height: 1.2;
+}

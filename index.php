@@ -79,11 +79,15 @@
 				<!--input-bottom -->
 				<form id="send_msg" class="send_msg_form chatbox-input">
 					<i class="fa-sharp fa-solid fa-paperclip"></i>
+					<!-- Emoji picker button -->
+					<button type="button" id="emoji-btn" class="emoji-btn">㋡</button>
 					<input id="msg" type="text" placeholder="Type a message" required />
 					<button class="submit_msg">
 						<i class="fa-solid fa-paper-plane"></i>
 					</button>
 				</form>
+				<!-- Emoji picker container -->
+				<div id="emoji-picker-container" style="display:none; position:absolute; bottom:60px; right:100px; z-index:999;"></div>
 			</div>		
 		</div>
 
@@ -92,6 +96,9 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/plyr/3.7.8/plyr.min.js"></script>
+		
+		<!-- Import emoji picker library -->
+		<script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
 
 		<script src="./assets/js/main.js?v=<?php echo time(); ?>"></script>
 		
