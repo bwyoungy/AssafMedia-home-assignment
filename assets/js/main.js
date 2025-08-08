@@ -880,8 +880,7 @@ $("body").on("click", ".delete-msg-btn", function(e){
 	e.preventDefault();
 	var $btn = $(this);
 	var msgId = $btn.attr("data-msg-id");
-	var contactId = $.globals.contactId;
-
+	
 	if(!msgId){
 		consoleLog("No msgId found for deletion", {level: 4, type: error});
 		return;

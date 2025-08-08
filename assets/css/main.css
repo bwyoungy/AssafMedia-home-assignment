@@ -134,7 +134,7 @@ audio{
 }
 
 .nav-icons li {
-  backgroud-color:pink;
+  background-color:pink;
   list-style: none;
   display: flex;
   cursor: pointer;
@@ -645,10 +645,19 @@ video{
 }
 
 .delete-msg-btn {
+    display: none;
+    position: absolute;
+    top: 5px;
+    right: 5px;
     background: transparent;
     border: none;
     color: red;
     cursor: pointer;
-    margin-left: 8px;
     font-size: 1em;
+    padding: 0;
+}
+
+/* Add show of deletion button when hovering over it */
+.message-box:hover .delete-msg-btn {
+    display: inline;
 }
